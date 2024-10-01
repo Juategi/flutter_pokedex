@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_pokedex/domain/pokedex/pokedex_repository.dart';
+import 'package:flutter_pokedex/injection.dart';
+import 'package:get_it/get_it.dart';
 
 void main() {
+  Injection().setUp();
   runApp(const Pokedex());
 }
 
@@ -25,6 +29,7 @@ class Home extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    GetIt.instance<PokedexRepository>().getAllPokemons();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,

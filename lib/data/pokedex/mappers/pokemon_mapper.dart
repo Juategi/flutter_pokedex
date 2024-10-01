@@ -1,9 +1,9 @@
-import 'package:flutter_pokedex/data/pokedex/entities/pokemon_dto.dart';
-import 'package:flutter_pokedex/data/pokedex/entities/pokemon_hive.dart';
+import 'package:flutter_pokedex/data/pokedex/datasources/pokeapi/pokemon_dto.dart';
+import 'package:flutter_pokedex/data/pokedex/datasources/hive/pokemon_hive.dart';
 import 'package:flutter_pokedex/domain/pokedex/pokemon_entity.dart';
 
 class PokemonMapper {
-  static PokemonHive toHiveDto(PokemonDto pokemonDto) {
+  static PokemonHive toHive(PokemonDto pokemonDto) {
     return PokemonHive(
       id: pokemonDto.id!,
       name: pokemonDto.name!,

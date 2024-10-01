@@ -1,13 +1,15 @@
-import 'package:flutter_pokedex/data/pokedex/entities/pokemon_hive.dart';
+import 'package:flutter_pokedex/data/pokedex/datasources/hive/pokemon_hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 class HiveDataSource {
+  final String capturedKey = 'captured';
+  final String pokemonBoxName = 'pokemonBox';
   late Box pokemonBox;
 
   Future<void> init() async {
     await Hive.initFlutter();
     Hive.registerAdapter(PokemonHiveAdapter());
-    pokemonBox = await Hive.openBox<PokemonHive>('pokemonBox');
+    pokemonBox = await Hive.openBox<PokemonHive>(pokemonBoxName);
   }
 
   Future<void> savePokemon(PokemonHive pokemon) async {
@@ -22,8 +24,9 @@ class HiveDataSource {
     return pokemons;
   }
 
-  List<PokemonHive> getPokemonsByIds(List<int> ids) {
+  List<PokemonHive> getCaptured() {
     List<PokemonHive> pokemons = [];
+    List<int> ids = pokemonBox.get(capturedKey, defaultValue: []);
     for (int i in ids) {
       pokemons.add(pokemonBox.getAt(i));
     }
@@ -36,6 +39,10 @@ class HiveDataSource {
 
   bool isDataSaved() {
     return pokemonBox.isNotEmpty;
+  }
+
+  void updateCaptured(List<int> ids) {
+    pokemonBox.put(capturedKey, ids);
   }
 
   //For development purpose

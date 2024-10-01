@@ -3,8 +3,8 @@ import 'package:flutter_pokedex/domain/pokedex/pokedex_repository.dart';
 import 'package:flutter_pokedex/injection.dart';
 import 'package:get_it/get_it.dart';
 
-void main() {
-  Injection().setUp();
+void main() async {
+  await Injection().setUp();
   runApp(const Pokedex());
 }
 
@@ -19,14 +19,19 @@ class Pokedex extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const Home(),
+      home: Home(),
     );
   }
 }
 
-class Home extends StatelessWidget {
-  const Home({super.key});
+class Home extends StatefulWidget {
+  Home({super.key});
 
+  @override
+  State<Home> createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     GetIt.instance<PokedexRepository>().getAllPokemons();

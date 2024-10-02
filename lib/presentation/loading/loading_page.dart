@@ -5,6 +5,7 @@ import 'package:flutter_pokedex/core/colors.dart';
 import 'package:flutter_pokedex/core/strings.dart';
 import 'package:flutter_pokedex/core/styles.dart';
 import 'package:flutter_pokedex/presentation/loading/widgets/loading_widget.dart';
+import 'package:flutter_pokedex/presentation/pokedex/pokedex_page.dart';
 
 class LoadingPage extends StatefulWidget {
   const LoadingPage({super.key});
@@ -44,7 +45,7 @@ class _LoadingPageState extends State<LoadingPage> {
                     const Duration(milliseconds: 500),
                     () =>
                         // ignore: use_build_context_synchronously
-                        Navigator.pushReplacementNamed(context, Routes.pokedex),
+                        Navigator.pushReplacement(context, _createRoute()),
                   );
                   return const LoadingWidget(
                     progress: 100,
@@ -65,4 +66,18 @@ class _LoadingPageState extends State<LoadingPage> {
       ),
     );
   }
+}
+
+//TODO: extraer
+Route _createRoute() {
+  return PageRouteBuilder(
+    pageBuilder: (context, animation, secondaryAnimation) =>
+        const PokedexPage(),
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      return FadeTransition(
+        opacity: animation,
+        child: child,
+      );
+    },
+  );
 }

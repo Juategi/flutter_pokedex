@@ -18,7 +18,7 @@ class PokedexRepositoryImpl implements PokedexRepository {
   Stream<Either<PokemonFailure, int>> fetchData() async* {
     try {
       List<Pokemon> pokemons = [];
-      await _hiveDataSource.clearData();
+      //await _hiveDataSource.clearData();
       // If the data is saved in the local storage, we return the progress as 100
       if (_hiveDataSource.isDataSaved()) {
         yield const Right(100);

@@ -1,3 +1,7 @@
+import 'dart:ui';
+
+import 'package:flutter/material.dart';
+
 class Pokemon {
   int id;
   String name;
@@ -17,24 +21,28 @@ class Pokemon {
 }
 
 enum PokemonType {
-  normal,
-  fire,
-  water,
-  electric,
-  grass,
-  ice,
-  fighting,
-  poison,
-  ground,
-  flying,
-  psychic,
-  bug,
-  rock,
-  ghost,
-  dragon,
-  dark,
-  steel,
-  fairy;
+  normal(Color(0xFFA4ACAF)),
+  fire(Color(0xFFFD7D24)),
+  water(Color(0xFF4592C4)),
+  electric(Color(0xFFFBC02D)),
+  grass(Color(0xFF9BCC50)),
+  ice(Color(0xFF51C4E7)),
+  fighting(Color(0xFFD56723)),
+  poison(Color(0xFFB97FC9)),
+  ground(Color(0xFFE0C068)),
+  flying(Color(0xFFA98FF3)),
+  psychic(Color(0xFFF366B9)),
+  bug(Color(0xFFA6B91A)),
+  rock(Color(0xFFB6A136)),
+  ghost(Color(0xFF735797)),
+  dragon(Color(0xFF6F35FC)),
+  dark(Color(0xFF705746)),
+  steel(Color(0xFFB7B7CE)),
+  fairy(Color(0xFFD685AD));
+
+  const PokemonType(this.color);
+
+  final Color color;
 
   static PokemonType fromString(String type) {
     switch (type) {
@@ -77,5 +85,10 @@ enum PokemonType {
       default:
         return PokemonType.normal;
     }
+  }
+
+  @override
+  String toString() {
+    return name[0].toUpperCase() + name.substring(1);
   }
 }

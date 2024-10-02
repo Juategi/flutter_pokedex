@@ -4,16 +4,16 @@ import 'package:flutter_pokedex/application/loading/loading_cubit.dart';
 import 'package:flutter_pokedex/core/colors.dart';
 import 'package:flutter_pokedex/core/strings.dart';
 import 'package:flutter_pokedex/core/styles.dart';
-import 'package:flutter_pokedex/presentation/loading/widgets/loading_page.dart';
+import 'package:flutter_pokedex/presentation/loading/widgets/loading_widget.dart';
 
-class LoadingWrapper extends StatefulWidget {
-  const LoadingWrapper({super.key});
+class LoadingPage extends StatefulWidget {
+  const LoadingPage({super.key});
 
   @override
-  State<LoadingWrapper> createState() => _LoadingWrapperState();
+  State<LoadingPage> createState() => _LoadingPageState();
 }
 
-class _LoadingWrapperState extends State<LoadingWrapper> {
+class _LoadingPageState extends State<LoadingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,7 +36,7 @@ class _LoadingWrapperState extends State<LoadingWrapper> {
             BlocBuilder<LoadingCubit, LoadingState>(
               builder: (context, state) {
                 if (state is Loading) {
-                  return LoadingPage(
+                  return LoadingWidget(
                     progress: state.progress,
                   );
                 } else if (state is Loaded) {
@@ -46,7 +46,7 @@ class _LoadingWrapperState extends State<LoadingWrapper> {
                         // ignore: use_build_context_synchronously
                         Navigator.pushReplacementNamed(context, Routes.pokedex),
                   );
-                  return const LoadingPage(
+                  return const LoadingWidget(
                     progress: 100,
                   );
                 } else if (state is LoadingError) {

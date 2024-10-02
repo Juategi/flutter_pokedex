@@ -4,7 +4,7 @@ import 'package:flutter_pokedex/application/loading/loading_cubit.dart';
 import 'package:flutter_pokedex/application/pokedex/pokedex_cubit.dart';
 import 'package:flutter_pokedex/core/strings.dart';
 import 'package:flutter_pokedex/injection.dart';
-import 'package:flutter_pokedex/presentation/loading/loading_wrapper.dart';
+import 'package:flutter_pokedex/presentation/loading/loading_page.dart';
 import 'package:flutter_pokedex/presentation/pokedex/pokedex_page.dart';
 import 'package:get_it/get_it.dart';
 
@@ -33,7 +33,7 @@ class Pokedex extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
         ),
-        home: const LoadingWrapper(),
+        home: const LoadingPage(),
         routes: {
           Routes.pokedex: (context) => const PokedexPage(),
         },

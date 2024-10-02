@@ -117,6 +117,7 @@ class Sprites {
   String? frontFemale;
   String? frontShiny;
   String? frontShinyFemale;
+  Other? other;
 
   Sprites({
     this.backDefault,
@@ -127,6 +128,7 @@ class Sprites {
     this.frontFemale,
     this.frontShiny,
     this.frontShinyFemale,
+    this.other,
   });
 
   Sprites.fromJson(Map<String, dynamic> json) {
@@ -138,10 +140,11 @@ class Sprites {
     frontFemale = json['front_female'];
     frontShiny = json['front_shiny'];
     frontShinyFemale = json['front_shiny_female'];
+    other = json['other'] != null ? Other.fromJson(json['other']) : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = {};
     data['back_default'] = backDefault;
     data['back_female'] = backFemale;
     data['back_shiny'] = backShiny;
@@ -150,7 +153,72 @@ class Sprites {
     data['front_female'] = frontFemale;
     data['front_shiny'] = frontShiny;
     data['front_shiny_female'] = frontShinyFemale;
+    if (other != null) {
+      data['other'] = other!.toJson();
+    }
 
+    return data;
+  }
+}
+
+class Other {
+  DreamWorld? dreamWorld;
+  OfficialArtwork? officialArtwork;
+
+  Other({this.dreamWorld, this.officialArtwork});
+
+  Other.fromJson(Map<String, dynamic> json) {
+    dreamWorld = json['dream_world'] != null
+        ? DreamWorld.fromJson(json['dream_world'])
+        : null;
+    officialArtwork = json['official-artwork'] != null
+        ? OfficialArtwork.fromJson(json['official-artwork'])
+        : null;
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = {};
+    if (dreamWorld != null) {
+      data['dream_world'] = dreamWorld!.toJson();
+    }
+    if (officialArtwork != null) {
+      data['official-artwork'] = officialArtwork!.toJson();
+    }
+    return data;
+  }
+}
+
+class DreamWorld {
+  String? frontDefault;
+  String? frontFemale;
+
+  DreamWorld({this.frontDefault, this.frontFemale});
+
+  DreamWorld.fromJson(Map<String, dynamic> json) {
+    frontDefault = json['front_default'];
+    frontFemale = json['front_female'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = {};
+    data['front_default'] = frontDefault;
+    data['front_female'] = frontFemale;
+    return data;
+  }
+}
+
+class OfficialArtwork {
+  String? frontDefault;
+
+  OfficialArtwork({this.frontDefault});
+
+  OfficialArtwork.fromJson(Map<String, dynamic> json) {
+    frontDefault = json['front_default'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = {};
+    data['front_default'] = frontDefault;
     return data;
   }
 }

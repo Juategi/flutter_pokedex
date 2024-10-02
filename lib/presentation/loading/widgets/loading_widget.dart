@@ -3,15 +3,15 @@ import 'package:flutter_pokedex/core/strings.dart';
 import 'package:flutter_pokedex/core/styles.dart';
 import 'package:flutter_pokedex/presentation/loading/widgets/pokeball_widget.dart';
 
-class LoadingPage extends StatefulWidget {
-  const LoadingPage({super.key, required this.progress});
+class LoadingWidget extends StatefulWidget {
+  const LoadingWidget({super.key, required this.progress});
   final int progress;
 
   @override
-  State<LoadingPage> createState() => _LoadingPageState();
+  State<LoadingWidget> createState() => _LoadingWidgetState();
 }
 
-class _LoadingPageState extends State<LoadingPage> {
+class _LoadingWidgetState extends State<LoadingWidget> {
   @override
   Widget build(BuildContext context) {
     return Center(

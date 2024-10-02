@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_pokedex/application/pokedex/pokedex_cubit.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get_it/get_it.dart';
 
 class PokedexPage extends StatefulWidget {
@@ -35,6 +36,7 @@ class _PokedexPageState extends State<PokedexPage> {
               itemBuilder: (context, index) {
                 final pokemon = state.pokemons[index];
                 return ListTile(
+                  trailing: SvgPicture.network(pokemon.imageUrl),
                   title: Text(pokemon.name),
                 );
               },

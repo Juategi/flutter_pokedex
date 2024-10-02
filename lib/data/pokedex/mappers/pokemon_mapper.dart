@@ -9,7 +9,7 @@ class PokemonMapper {
       name: pokemonDto.name!,
       weight: pokemonDto.weight!,
       height: pokemonDto.height!,
-      imageUrl: pokemonDto.sprites!.frontDefault!,
+      imageUrl: pokemonDto.sprites!.other!.dreamWorld!.frontDefault!,
       types: pokemonDto.types!.map((type) => type.type!.name!).toList(),
     );
   }

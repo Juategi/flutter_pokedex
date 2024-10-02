@@ -56,7 +56,7 @@ class HiveDataSource {
   }
 
   //For development purpose
-  void clearData() {
-    pokemonBox.clear();
+  Future<void> clearData() async {
+    await pokemonBox.clear();
   }
 }

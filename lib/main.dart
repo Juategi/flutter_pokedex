@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_pokedex/domain/pokedex/pokedex_repository.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_pokedex/application/loading/loading_cubit.dart';
 import 'package:flutter_pokedex/injection.dart';
+import 'package:flutter_pokedex/presentation/loading/loading_page.dart';
 import 'package:get_it/get_it.dart';
 
 void main() async {
@@ -13,34 +15,20 @@ class Pokedex extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Pokédex Code Challenge',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => GetIt.I.get<LoadingCubit>()..fetchData(),
+        ),
+      ],
+      child: MaterialApp(
+        title: 'Pokédex Code Challenge',
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          useMaterial3: true,
+        ),
+        home: const LoadingPage(),
       ),
-      home: Home(),
-    );
-  }
-}
-
-class Home extends StatefulWidget {
-  Home({super.key});
-
-  @override
-  State<Home> createState() => _HomeState();
-}
-
-class _HomeState extends State<Home> {
-  @override
-  Widget build(BuildContext context) {
-    GetIt.instance<PokedexRepository>().getAllPokemons();
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: const Text('Pokédex Code Challenge'),
-      ),
-      body: const Center(child: Text('Lee el README para comenzar')),
     );
   }
 }

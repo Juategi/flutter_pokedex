@@ -18,6 +18,7 @@ class PokedexRepositoryImpl implements PokedexRepository {
   Stream<Either<PokemonFailure, int>> fetchData() async* {
     try {
       List<Pokemon> pokemons = [];
+      await _hiveDataSource.clearData();
       // If the data is saved in the local storage, we return the progress as 100
       if (_hiveDataSource.isDataSaved()) {
         yield const Right(100);
@@ -57,20 +58,29 @@ class PokedexRepositoryImpl implements PokedexRepository {
 
   @override
   Either<PokemonFailure, List<Pokemon>> getCapturedPokemons() {
-    if (_hiveDataSource.isDataSaved()) {
-      final pokemons = _hiveDataSource.getCaptured();
-      return Right(
-          pokemons.map((pokemon) => PokemonMapper.toDomain(pokemon)).toList());
+    try {
+      if (_hiveDataSource.isDataSaved()) {
+        final pokemons = _hiveDataSource.getCaptured();
+        return Right(pokemons
+            .map((pokemon) => PokemonMapper.toDomain(pokemon))
+            .toList());
+      }
+      return Left(_pokemonFailureNoDataSaved);
+    } on Exception catch (e) {
+      return Left(PokemonFailure(e.toString()));
     }
-    return Left(_pokemonFailureNoDataSaved);
   }
 
   @override
   Either<PokemonFailure, Pokemon> getPokemon(int id) {
-    if (_hiveDataSource.isDataSaved()) {
-      final pokemon = _hiveDataSource.getPokemon(id);
-      return Right(PokemonMapper.toDomain(pokemon));
+    try {
+      if (_hiveDataSource.isDataSaved()) {
+        final pokemon = _hiveDataSource.getPokemon(id);
+        return Right(PokemonMapper.toDomain(pokemon));
+      }
+      return Left(_pokemonFailureNoDataSaved);
+    } on Exception catch (e) {
+      return Left(PokemonFailure(e.toString()));
     }
-    return Left(_pokemonFailureNoDataSaved);
   }
 }

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_pokedex/application/loading/loading_cubit.dart';
 import 'package:flutter_pokedex/core/colors.dart';
 import 'package:flutter_pokedex/core/strings.dart';
+import 'package:flutter_pokedex/core/styles.dart';
 import 'package:flutter_pokedex/presentation/loading/widgets/loading_page.dart';
 
 class LoadingWrapper extends StatefulWidget {
@@ -25,32 +26,40 @@ class _LoadingWrapperState extends State<LoadingWrapper> {
           ),
         ),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             Image.asset(
               Images.pokedexTitle,
               width: 200,
               height: 200,
             ),
-            BlocBuilder<LoadingCubit, LoadingState>(builder: (context, state) {
-              if (state is Loading) {
-                return LoadingPage(
-                  progress: state.progress,
-                );
-              } else if (state is Loaded) {
-                return const Center(
-                  child: Text('Loaded'),
-                );
-              } else if (state is LoadingError) {
-                return Center(
-                  child: Text(
-                    state.message,
-                    style: const TextStyle(color: Colors.red, fontSize: 20),
-                  ),
-                );
-              }
-              return const SizedBox();
-            }),
+            BlocBuilder<LoadingCubit, LoadingState>(
+              builder: (context, state) {
+                if (state is Loading) {
+                  return LoadingPage(
+                    progress: state.progress,
+                  );
+                } else if (state is Loaded) {
+                  Future.delayed(
+                    const Duration(milliseconds: 500),
+                    () =>
+                        // ignore: use_build_context_synchronously
+                        Navigator.pushReplacementNamed(context, Routes.pokedex),
+                  );
+                  return const LoadingPage(
+                    progress: 100,
+                  );
+                } else if (state is LoadingError) {
+                  return Center(
+                    child: Text(
+                      state.message,
+                      style: TextStyles.error,
+                    ),
+                  );
+                }
+                return const SizedBox();
+              },
+            ),
           ],
         ),
       ),

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_pokedex/core/strings.dart';
+import 'package:flutter_pokedex/core/styles.dart';
 import 'package:flutter_pokedex/presentation/loading/widgets/pokeball_widget.dart';
 
 class LoadingPage extends StatefulWidget {
@@ -19,8 +21,8 @@ class _LoadingPageState extends State<LoadingPage> {
           const PokeballWidget(),
           const SizedBox(height: 20),
           Text(
-            'Capturing pokemons... ${widget.progress}%',
-            style: const TextStyle(fontSize: 20),
+            '${Labels.loading} ${widget.progress}%',
+            style: TextStyles.title,
           ),
         ],
       ),

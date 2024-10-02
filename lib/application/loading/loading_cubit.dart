@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_pokedex/core/strings.dart';
 import 'package:flutter_pokedex/domain/pokedex/pokedex_repository.dart';
 // ignore: depend_on_referenced_packages
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -13,7 +14,7 @@ class LoadingCubit extends Cubit<LoadingState> {
   LoadingCubit(this._pokedexRepository) : super(const LoadingState.loading(0));
 
   Future<void> fetchData() async {
-    await player.setAsset('assets/sounds/opening.mp3');
+    await player.setAsset(Images.loadingSound);
     player.setVolume(0.3);
     player.play();
     await for (final progress in _pokedexRepository.fetchData()) {
@@ -24,8 +25,8 @@ class LoadingCubit extends Cubit<LoadingState> {
         },
         (progress) {
           if (progress == 100) {
-            emit(const LoadingState.loaded());
             player.stop();
+            emit(const LoadingState.loaded());
           } else {
             emit(LoadingState.loading(progress));
           }

@@ -1,3 +1,4 @@
+import 'package:flutter_pokedex/application/pokedex/pokedex_cubit.dart';
 import 'package:flutter_pokedex/data/pokedex/datasources/pokeapi/pokeapi_data_source.dart';
 import 'package:flutter_pokedex/data/pokedex/datasources/hive/hive_data_source.dart';
 import 'package:flutter_pokedex/data/pokedex/pokedex_repository_impl.dart';
@@ -12,6 +13,9 @@ class Injection {
     PokedexRepository pokedexRepository =
         PokedexRepositoryImpl(pokeApiDataSource, hiveDataSource);
 
+    PokedexCubit pokedexCubit = PokedexCubit(pokedexRepository);
+
     GetIt.I.registerSingleton<PokedexRepository>(pokedexRepository);
+    GetIt.I.registerSingleton<PokedexCubit>(pokedexCubit);
   }
 }

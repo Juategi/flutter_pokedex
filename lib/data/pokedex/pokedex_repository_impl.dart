@@ -10,43 +10,59 @@ import 'package:flutter_pokedex/domain/pokedex/pokemon_failure.dart';
 class PokedexRepositoryImpl implements PokedexRepository {
   final PokeApiDataSource _pokeApiDataSource;
   final HiveDataSource _hiveDataSource;
-
+  final PokemonFailure _pokemonFailureNoDataSaved =
+      PokemonFailure("No data saved");
   PokedexRepositoryImpl(this._pokeApiDataSource, this._hiveDataSource);
 
   @override
-  Future<Either<PokemonFailure, List<Pokemon>>> getAllPokemons() async {
+  Stream<Either<PokemonFailure, int>> fetchData() async* {
     try {
       List<Pokemon> pokemons = [];
-      // If the data is saved in the local storage, we return it
+      // If the data is saved in the local storage, we return the progress as 100
       if (_hiveDataSource.isDataSaved()) {
-        final pokemonDtos = _hiveDataSource.getPokemons();
-        pokemons = pokemonDtos.map((e) => PokemonMapper.toDomain(e)).toList();
+        yield const Right(100);
       }
-      // If the data is not saved, we fetch it from the API
+      // If the data is not saved, we fetch it from the API the first time the app is opened
       else {
         for (int i = 1; i <= Settings.maxPokemons; i++) {
           final pokemonDto = await _pokeApiDataSource.getPokemon(i);
           final pokemonHive = PokemonMapper.toHive(pokemonDto);
           pokemons.add(PokemonMapper.toDomain(pokemonHive));
           //We catch the data in the local storage
-          _hiveDataSource.savePokemon(pokemonHive);
+          await _hiveDataSource.savePokemon(pokemonHive);
+          //We yield the progress
+          yield Right(((i / Settings.maxPokemons) * 100).toInt());
         }
       }
-      return Right(pokemons);
+    } on Exception catch (e) {
+      yield Left(PokemonFailure(e.toString()));
+    }
+  }
+
+  @override
+  Either<PokemonFailure, List<Pokemon>> getAllPokemons() {
+    try {
+      if (_hiveDataSource.isDataSaved()) {
+        final pokemonHives = _hiveDataSource.getPokemons();
+        List<Pokemon> pokemons = pokemonHives
+            .map((pokemon) => PokemonMapper.toDomain(pokemon))
+            .toList();
+        return Right(pokemons);
+      }
+      return Left(_pokemonFailureNoDataSaved);
     } on Exception catch (e) {
       return Left(PokemonFailure(e.toString()));
     }
   }
 
-  /* We get captured pokemons and pokemon details from the local storage, 
-  because we assume that the data has been fetched already */
   @override
   Either<PokemonFailure, List<Pokemon>> getCapturedPokemons() {
     if (_hiveDataSource.isDataSaved()) {
       final pokemons = _hiveDataSource.getCaptured();
-      return Right(pokemons.map((e) => PokemonMapper.toDomain(e)).toList());
+      return Right(
+          pokemons.map((pokemon) => PokemonMapper.toDomain(pokemon)).toList());
     }
-    return Left(PokemonFailure("No data saved"));
+    return Left(_pokemonFailureNoDataSaved);
   }
 
   @override
@@ -55,6 +71,6 @@ class PokedexRepositoryImpl implements PokedexRepository {
       final pokemon = _hiveDataSource.getPokemon(id);
       return Right(PokemonMapper.toDomain(pokemon));
     }
-    return Left(PokemonFailure("No data saved"));
+    return Left(_pokemonFailureNoDataSaved);
   }
 }

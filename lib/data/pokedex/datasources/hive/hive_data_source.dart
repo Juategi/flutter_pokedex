@@ -26,7 +26,7 @@ class HiveDataSource {
 
   List<PokemonHive> getCaptured() {
     List<PokemonHive> pokemons = [];
-    List<int> ids = pokemonBox.get(capturedKey, defaultValue: []);
+    List<int> ids = _getCapturedIds();
     for (int i in ids) {
       pokemons.add(pokemonBox.getAt(i));
     }
@@ -41,8 +41,18 @@ class HiveDataSource {
     return pokemonBox.isNotEmpty;
   }
 
-  void updateCaptured(List<int> ids) {
+  void updateCaptured(int id) {
+    List<int> ids = _getCapturedIds();
+    if (ids.contains(id)) {
+      ids.remove(id);
+    } else {
+      ids.add(id);
+    }
     pokemonBox.put(capturedKey, ids);
+  }
+
+  List<int> _getCapturedIds() {
+    return pokemonBox.get(capturedKey, defaultValue: []);
   }
 
   //For development purpose
